@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
     struct timeval tvpause, tvunpause;
     struct timeval tvptotal;
     char status[161];
-    char songname[41];
+    char songname[41] = {};
     char notpaus[4];
 
     int loop = 0; // kontest
@@ -244,6 +244,9 @@ int main(int argc, char* argv[])
       } else if (strstr(argv[i],"-l")) {
         loop = 1;
         continue;
+      } else if (strstr(argv[i],"-d")) { // dry run?
+        noplay = 1;
+        continue;
       } else if (strstr(argv[i],"-ao")) {
         default_driver = ao_driver_id(argv[++i]);
         continue;
@@ -273,8 +276,6 @@ int main(int argc, char* argv[])
     struct pollfd pollfds;
     int timeout = 1;            /* Timeout in msec. */
     int pause=0;
-    int mono=0;
-    int bits=0;
     int song;
 
     // [rev--dly--] [sur--dly--] [bas--rng--]
@@ -318,7 +319,7 @@ for (song=0; song<nFiles; song++) {
     printf("[%d/%d]",song+1,nFiles);
 
     filedata = getFileData(filename, &size);
-    if (filedata == NULL) continue;
+    if (filedata == NULL || size == 0) continue;
     printf(" [%ld]\n",size);
 
     // Note: All "Basic Settings" must be set before ModPlug_Load.
@@ -355,36 +356,38 @@ for (song=0; song<nFiles; song++) {
 
 
     set_keypress();
-    strcpy(songname, ModPlug_GetName(f2));
+    strncpy(songname, ModPlug_GetName(f2),41);
 
     /* if no modplug "name" - use last 41 characters of filename */
     if (strlen(songname)==0) {
         int l = strlen(filename);
-	char *st = filename;
+        char *st = filename;
         if (l >= 41) st = filename + l - 41;
         strncpy(songname,st,41);
         songname[40] = 0;
     }
-    sprintf(status,"[1Gplaying %s (%%d.%%d/%d\") (%%d/%%d/%%d)    \b\b\b\b",songname,ModPlug_GetLength(f2)/1000);
-    if (loop) sprintf(status,"[1Glooping %s (%%d.%%d/%d\") (%%d/%%d/%%d)    \b\b\b\b",songname,ModPlug_GetLength(f2)/1000);
+    sprintf(status,"[1Gplaying %%s (%%d.%%d/%d\") (%%d/%%d/%%d)    \b\b\b\b", ModPlug_GetLength(f2)/1000);
+    if (loop) sprintf(status,"[1Glooping %%s (%%d.%%d/%d\") (%%d/%%d/%%d)    \b\b\b\b",ModPlug_GetLength(f2)/1000);
 
     gettimeofday(&tvstart,NULL);
     tvptotal.tv_sec=tvptotal.tv_usec=0;
     mlen=1;
-    
-    while(mlen!=0) {
 
-	if (!pause) {
-	    gettimeofday(&tv,NULL);
-	    mlen = ModPlug_Read(f2,audio_buffer,BUF_SIZE);
-            if (mlen > 0 && ao_play(device, audio_buffer, mlen) == 0) {
-		perror("audio write");
-		exit(1);
-    	    }
+    while(mlen!=0 && !noplay) {
       if (mlen==0) { break; }
+
+      if (!pause) {
+        gettimeofday(&tv,NULL);
+        mlen = ModPlug_Read(f2,audio_buffer,BUF_SIZE);
+        if (mlen > 0 && ao_play(device, (char *)audio_buffer, mlen) == 0) {
+          perror("audio write");
+          exit(1);
         }
-        printf(status,tv.tv_sec-tvstart.tv_sec-tvptotal.tv_sec,tv.tv_usec/100000,format.rate,format.channels,settings.mBits/*,rev,revdly,sur,surdly,bas,basrng*/);
-	fflush(stdout);
+      }
+      printf(status, songname,
+          tv.tv_sec-tvstart.tv_sec-tvptotal.tv_sec,tv.tv_usec/100000,
+          format.rate,format.channels,settings.mBits/*,rev,revdly,sur,surdly,bas,basrng*/);
+      fflush(stdout);
 
       if ((mlen==0) && (loop==1)) {
         /*printf("LOOPING NOW\n");*/
