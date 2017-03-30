@@ -1,6 +1,6 @@
 bin_PROGRAMS = modplug123
 
-INCLUDES = \
+AM_CPPFLAGS = \
         $(LIBMODPLUG_CFLAGS)
 
 modplug123_SOURCES = modplug123.c
