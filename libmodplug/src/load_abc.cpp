@@ -4213,8 +4213,9 @@ BOOL CSoundFile::ReadABC(const uint8_t *lpStream, DWORD dwMemLength)
 									while( abcchord>0 ) {
 										abcchord--;
 										h->tp = abc_locate_track(h, h->tp->v, abcchord? abcchord+DRONEPOS2: 0);
-										if( vnl && (abcchord < 8) && (cnl[abcchord] != cnotelen || cnd[abcchord] != cnotediv) ) {
-											abc_add_noteoff(h, h->tp, 
+										if( vnl && (abcchord < 8) && cnotelen && cnd[abcchord] &&
+											(cnl[abcchord] != cnotelen || cnd[abcchord] != cnotediv) ) {
+											abc_add_noteoff(h, h->tp,
 												h->tracktime - thistime
 											 	+ (thistime * cnl[abcchord] * cnotediv)/(cnd[abcchord] * cnotelen) );
 										}
@@ -4287,7 +4288,7 @@ BOOL CSoundFile::ReadABC(const uint8_t *lpStream, DWORD dwMemLength)
 										}
 									}
 								}
-								else 
+								else
 									abcnoslurs=0;
 								break;
 							case ')':	// end of slurs
