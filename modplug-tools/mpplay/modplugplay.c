@@ -432,8 +432,8 @@ for (song=1; song<argc; song++) {
         strncpy(songname,st,41);
         songname[40] = 0;
     }
-    sprintf(status,"[1Gplaying %s (%%d.%%d/%d\") (%%d/%%d/%%d%%s)    \b\b\b\b",songname,ModPlug_GetLength(f2)/1000);
-    if (loop) sprintf(status,"[1Glooping %s (%%d.%%d/%d\") (%%d/%%d/%%d%%s)    \b\b\b\b",songname,ModPlug_GetLength(f2)/1000);
+    sprintf(status,"[1Gplaying %%s (%%d.%%d/%d\") (%%d/%%d/%%d%%s)    \b\b\b\b",ModPlug_GetLength(f2)/1000);
+    if (loop) sprintf(status,"[1Glooping %%s (%%d.%%d/%d\") (%%d/%%d/%%d%%s)    \b\b\b\b",ModPlug_GetLength(f2)/1000);
 
     gettimeofday(&tvstart,NULL);
     tvptotal.tv_sec=tvptotal.tv_usec=0;
@@ -451,7 +451,7 @@ for (song=1; song<argc; song++) {
     	    }
 	    /*printf("%d %d\n",mlen,len);*/
         }
-	printf(status,tv.tv_sec-tvstart.tv_sec-tvptotal.tv_sec,tv.tv_usec/100000,speed,channels,settings.mBits/*,rev,revdly,sur,surdly,bas,basrng*/);
+	printf(status,songname,tv.tv_sec-tvstart.tv_sec-tvptotal.tv_sec,tv.tv_usec/100000,speed,channels,settings.mBits/*,rev,revdly,sur,surdly,bas,basrng*/);
 	fflush(stdout);
 
 	if ((mlen==0) && (loop==1)) {
