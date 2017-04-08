@@ -407,8 +407,8 @@ for (song=0; song<nFiles; song++) {
 
         default:
             if (pollfds.revents && POLLIN) {
-          nread = read(0, buffer, 1); /* s/nread/1/2 */
-                if (nread == 0) {
+              nread = read(0, buffer, 1); /* s/nread/1/2 */
+              if (nread == 0) {
                     printf("keyboard done\n");
                     exit(0);
                } else if (nread < 0) {
@@ -502,8 +502,8 @@ for (song=0; song<nFiles; song++) {
         }
 
         if (buffer[0]=='r') {
-      song=(int) ((float)(argc-1)*rand()/(RAND_MAX+1.0));
-      mlen=0; pause=0;
+          song=(int) ((float)(argc-1)*rand()/(RAND_MAX+1.0));
+          mlen=0; pause=0;
 //      ioctl(audio_fd,SNDCTL_DSP_RESET,0);
       /* printf("\n[%d?]\n",song+1); */
         }
@@ -529,7 +529,7 @@ for (song=0; song<nFiles; song++) {
         }
         */
         if (buffer[0]=='l') {
-      loop^=1;
+          loop^=1;
       if (loop) {
           memcpy(status+4,"loop",4);
       } else {
@@ -538,18 +538,18 @@ for (song=0; song<nFiles; song++) {
         } /* loop */
 
         if (buffer[0]=='p') {
-      pause^=1;
-      if (pause) {
-          gettimeofday(&tvpause,NULL);
-          memcpy(notpaus,status+4,4);
-          memcpy(status+4,"paus",4);
-      } else {
-          gettimeofday(&tvunpause,NULL);
-          memcpy(status+4,notpaus,4);
-          tvptotal.tv_sec+=tvunpause.tv_sec-tvpause.tv_sec;
-          tvptotal.tv_usec+=tvunpause.tv_usec-tvpause.tv_usec;
-          /* printf(status,tv.tv_sec-tvstart.tv_sec,tv.tv_usec/100000); */
-      }
+          pause^=1;
+          if (pause) {
+            gettimeofday(&tvpause,NULL);
+            memcpy(notpaus,status+4,4);
+            memcpy(status+4,"paus",4);
+          } else {
+            gettimeofday(&tvunpause,NULL);
+            memcpy(status+4,notpaus,4);
+            tvptotal.tv_sec+=tvunpause.tv_sec-tvpause.tv_sec;
+            tvptotal.tv_usec+=tvunpause.tv_usec-tvpause.tv_usec;
+            /* printf(status,tv.tv_sec-tvstart.tv_sec,tv.tv_usec/100000); */
+          }
         } /* pause */
                 }
             }
