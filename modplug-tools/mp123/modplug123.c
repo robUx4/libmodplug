@@ -412,6 +412,12 @@ for (song=0; song<nFiles; song++) {
                 if (nread == 0) {
                     printf("keyboard done\n");
                     exit(0);
+               } else if (nread < 0) {
+                 if (nread == -1 && errno == EBADF) {
+                   printf("keyboard broken\n");
+                   exit(0);
+                 }
+                 printf("Read error - %d.\n", errno);
                } else {
                     buffer[nread] = 0;
                     /* printf("%s", buffer); */
