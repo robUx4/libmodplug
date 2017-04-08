@@ -278,12 +278,12 @@ int main(int argc, char* argv[])
     int song;
 
     // [rev--dly--] [sur--dly--] [bas--rng--]
-    int rev=0;    // a
-    int revdly=0; // s
-    int sur=0;    // d
-    int surdly=0; // y
-    int bas=0;    // x
-    int basrng=0; // c
+//    int rev=0;    // a
+//    int revdly=0; // s
+//    int sur=0;    // d
+//    int surdly=0; // y
+//    int bas=0;    // x
+//    int basrng=0; // c
 
     /* Initialize pollfds; we're looking at input, stdin */
     pollfds.fd = 0;             /* stdin */
