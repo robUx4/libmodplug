@@ -176,14 +176,14 @@ void help(char *s, int exitcode)
 	exit(exitcode);
 }
 
-int get_byteorder() 
+int get_byteorder()
 {
 #define sz sizeof(int)
     int ival;
     int format;
     char s[sz];
-    char t[sz];
-    int i, lit, big;
+    unsigned i;
+    int lit, big;
 
     for (i=0; i<sz; i++) s[i] = i;
     ival = *(int *)s;
@@ -194,7 +194,6 @@ int get_byteorder()
         ival >>= 8;
         if (s[i] == c) lit++;
         if (s[sz-i-1] == c) big++;
-        t[i] = c;
     }
     if (lit == sz && big == 0) {
         /*printf("little endian\n");*/
