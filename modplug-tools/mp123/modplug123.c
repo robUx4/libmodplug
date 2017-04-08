@@ -92,7 +92,6 @@ command line option handling
 #define BUF_SIZE 4096
 
 static struct termios stored_settings;
-int audio_fd, mixer_fd;
 unsigned char audio_buffer[BUF_SIZE];
 
 typedef struct {
@@ -335,7 +334,6 @@ for (song=0; song<nFiles; song++) {
     f2 = ModPlug_Load(filedata, size);
     if (!f2) {
       printf("could not load %s\n", filename);
-      close(audio_fd);
       free(filedata); /* ? */
     } else {
       songsplayed++;
