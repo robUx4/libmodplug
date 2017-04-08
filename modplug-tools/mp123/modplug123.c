@@ -271,7 +271,8 @@ int main(int argc, char* argv[])
 //  printf("Default driver = %i\n", default_driver);
 
     char buffer[128];
-    int result, nread;
+    int result;
+    ssize_t nread;
     struct pollfd pollfds;
     int timeout = 1;            /* Timeout in msec. */
     int pause=0;
