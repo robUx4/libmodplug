@@ -209,9 +209,9 @@ int main(int argc, char* argv[])
     struct timeval tv;
     struct timeval tvpause, tvunpause;
     struct timeval tvptotal;
-    char status[161];
+    char status[161] = {};
     char songname[41] = {};
-    char notpaus[4];
+    char notpaus[4] = {};
 
     int loop = 0; // kontest
     int noplay = 0;
