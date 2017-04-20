@@ -90,6 +90,7 @@ command line option handling
 #define VERSION "0.5.3"
 
 #define BUF_SIZE 4096
+#define MAX_FILES 255
 
 static struct termios stored_settings;
 unsigned char audio_buffer[BUF_SIZE];
@@ -218,7 +219,7 @@ int main(int argc, char* argv[])
 
     int songsplayed = 0;
 
-    int nFiles = 0, fnOffset[100];
+    int nFiles = 0, fnOffset[MAX_FILES];
     int i;
 
     ModPlug_Settings settings;
@@ -262,6 +263,10 @@ int main(int argc, char* argv[])
       }
       /* "valid" filename - store it */
       fnOffset[nFiles++] = i;
+      // we can't store fnOffset > MAX_FILES
+      if (nFiles >= MAX_FILES) {
+        break;
+      }
     }
 
     format.bits = 16;
@@ -418,6 +423,7 @@ for (song=0; song<nFiles; song++) {
                  }
                  printf("Read error - %d.\n", errno);
                } else {
+                 if (nread != 1) printf("NREAD=%ld\n", nread);
                     buffer[nread] = 0;
                     /* printf("%s", buffer); */
 
