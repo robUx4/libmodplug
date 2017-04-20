@@ -247,7 +247,7 @@ int main(int argc, char* argv[])
       } else if (strstr(argv[i],"-d")) { // dry run?
         noplay = 1;
         continue;
-      } else if (strstr(argv[i],"-ao")) {
+      } else if (strstr(argv[i],"-ao") && i+1 < argc) {
         default_driver = ao_driver_id(argv[++i]);
         continue;
       }
