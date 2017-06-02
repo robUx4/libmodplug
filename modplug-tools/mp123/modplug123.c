@@ -309,6 +309,13 @@ for (song=0; song<nFiles; song++) {
 
     char *filename = argv[fnOffset[song]];
 
+    printf("%s ",filename);
+    printf("[%d/%d]",song+1,nFiles);
+
+    filedata = getFileData(filename, &size);
+    printf(" [%ld]\n",size);
+    if (filedata == NULL || size == 0) continue;
+
     /* -- Open driver -- */
     if (default_driver == ao_driver_id("wav")) {
         device = ao_open_file(default_driver, "output.wav", 1, &format, NULL /*no options*/);
@@ -320,12 +327,6 @@ for (song=0; song<nFiles; song++) {
       fprintf(stderr, "ERROR: %i\n", errno);
       return 1;
     }
-    printf("%s ",filename);
-    printf("[%d/%d]",song+1,nFiles);
-
-    filedata = getFileData(filename, &size);
-    if (filedata == NULL || size == 0) continue;
-    printf(" [%ld]\n",size);
 
     // Note: All "Basic Settings" must be set before ModPlug_Load.
     settings.mResamplingMode = MODPLUG_RESAMPLE_FIR; /* RESAMP */
@@ -568,7 +569,7 @@ for (song=0; song<nFiles; song++) {
 
     free(filedata);
     } /* valid module */
-    
+
     ao_close(device);
     fprintf(stderr, "Closing audio device.\n");
   } /* for */
