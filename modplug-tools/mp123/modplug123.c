@@ -90,7 +90,7 @@ command line option handling
 #define VERSION "0.5.3"
 
 #define BUF_SIZE 4096
-#define MAX_FILES 255
+#define MAX_FILES 1024
 
 static struct termios stored_settings;
 unsigned char audio_buffer[BUF_SIZE];
@@ -565,11 +565,12 @@ for (song=0; song<nFiles; song++) {
 
     reset_keypress();
     ModPlug_Unload(f2);
-    ao_close(device);
-    fprintf(stderr, "Closing audio device.\n");
+
     free(filedata);
     } /* valid module */
-
+    
+    ao_close(device);
+    fprintf(stderr, "Closing audio device.\n");
   } /* for */
   ao_shutdown();
 
