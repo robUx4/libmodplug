@@ -470,7 +470,7 @@ BOOL CSoundFile::SaveMod(LPCSTR lpszFileName, UINT nPacking)
 	if (m_nChannels == 4)
 		strcpy((LPSTR)&bTab, "M.K.");
 	else
-		wsprintf((LPSTR)&bTab, "%luCHN", m_nChannels);
+		sprintf((LPSTR)&bTab, "%luCHN", m_nChannels);
 	fwrite(bTab, 4, 1, f);
 	// Writing patterns
 	for (UINT ipat=0; ipat<nbp; ipat++) if (Patterns[ipat])
